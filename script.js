@@ -1,3 +1,4 @@
+
 class ImageDisplay {
     constructor(imageView, imageBox, imagePage, prevBtn, nextBtn, closeButton, images, imageFolder) {
         this.imageView = imageView;
@@ -15,10 +16,27 @@ class ImageDisplay {
     }
 
     preloadImages() {
+        let imagesLoaded = 0;
+        const totalImages = this.images.length;
+
         this.images.forEach((image) => {
             const img = new Image();
+            img.onload = () => {
+                imagesLoaded++;
+                if (imagesLoaded === totalImages) {
+                    this.hideSpinner();
+                }
+            };
             img.src = image.src;
         });
+    }
+
+    hideSpinner() {
+        const spinnerWrapper = document.querySelector('.spinner-wrapper');
+        spinnerWrapper.style.opacity = '0';
+        setTimeout(() => {
+            spinnerWrapper.style.display = 'none';
+        }, 200);
     }
 
     setupEventListeners() {
